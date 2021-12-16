@@ -1,0 +1,77 @@
+[
+  {
+    "_id": {
+      "$oid": "5ff9f8bbdd9c5a5a1e608130"
+    },
+    "type": "Seguro de Carro",
+    "title": "Poliza de seguro",
+    "code": 1614025140712,
+    "date": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "enabled": true,
+    "renewable": true,
+    "vehicle_value": 2500,
+    "coverage_form_type": "Suma Asegurada Fija",
+    "client_id": 1,
+    "vehicle_id": 1,
+    "observations": "Información de la poliza",
+    "receipt_id": null,
+    "created_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "updated_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "5ffa221fc42d1921eda4a986"
+    },
+    "type": "Seguro de Carro",
+    "title": "Poliza de seguro",
+    "code": 1614025140713,
+    "date": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "enabled": true,
+    "renewable": true,
+    "vehicle_value": 2500,
+    "coverage_form_type": "Suma Asegurada Fija",
+    "client_id": 2,
+    "vehicle_id": 2,
+    "observations": "Información de la poliza",
+    "receipt_id": null,
+    "created_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "updated_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "5ffa222fc42d1921eda4a987"
+    },
+    "type": "Seguro de Carro",
+    "title": "Poliza de seguro",
+    "code": 1614025140714,
+    "date": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "enabled": true,
+    "renewable": true,
+    "vehicle_value": 2500,
+    "coverage_form_type": "Suma Asegurada Fija",
+    "client_id": 3,
+    "vehicle_id": 3,
+    "observations": "Información de la poliza",
+    "receipt_id": null,
+    "created_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    },
+    "updated_at": {
+      "$date": "2021-01-09T04:00:00Z"
+    }
+  }
+]

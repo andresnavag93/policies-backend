@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    #support mac with M1
+    container_name: mysqldb_container
+    #platform: linux/x86_64
+    #command: --default-authentication-plugin=mysql_native_password
+    image: mariadb:10.1.35
+    restart: always
+    env_file: ./.env
+    environment:
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_HOST=localhost
+      - MYSQL_TCP_PORT=$MYSQL_PORT
+    ports:
+      - $MYSQL_PORT:$MYSQL_PORT
+    volumes:
+      # Compose knows how to interpret relative paths;
+      # they are relative to the location of the docker-compose.yml file
+      - ./db_data:/var/lib/mysql/data
+
+  mysqldb2:
+    #support mac with M1
+    container_name: mysqldb_container_apigetway
+    #platform: linux/x86_64
+    #command: --default-authentication-plugin=mysql_native_password
+    image: mariadb:10.1.35
+    restart: always
+    env_file: ./.env
+    environment:
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE_APIGETWAY
+      - MYSQL_HOST=localhost
+      - MYSQL_TCP_PORT=$MYSQL_PORT
+    ports:
+      - $MYSQL_PORT_APIGETWAY:$MYSQL_PORT
+    volumes:
+    # Compose knows how to interpret relative paths;
+    # they are relative to the location of the docker-compose.yml file
+      - ./db_data:/var/lib/mysql/data
+
+  apigeteway:
+    container_name: apigetway-microservice
+    image: apigetway-microservice:1.0.0
+    env_file: ./.env
+    environment:
+      - PORT=$APIGETWAY_PORT
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_PASS=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DB=$MYSQL_DATABASE_APIGETWAY
+      - MYSQL_PORT=$MYSQL_PORT
+      - JWT_KEY=$JWT_KEY_APIGETWAY
+      - MYSQL_HOST=$MYSQL_HOST_APIGETWAY
+      - AUTH_ACTIVE=$AUTH_ACTIVE
+      - CLIENT_URL=http://clients:${CLIENTS_PORT}/
+      - POLICIES_URL=http://policies:${POLICIES_PORT}/
+      - SINISTERS_URL=http://sinisters:${SINISTERS_PORT}/
+      - RECEIPTS_URL=http://receipts:${RECEIPTS_PORT}/
+    build: ./apigetway-microservice
+    command: yarn start
+    ports:
+      - $APIGETWAY_PORT:$APIGETWAY_PORT
+    depends_on:
+      - mysqldb2
+    links:
+      - mysqldb2
+      - sinisters
+      - clients
+      - receipts
+      - policies
+
+
+    restart: always
+
+
+  sinisters:
+    container_name: sinisters-microservice
+    image: sinisters-microservice:1.0.0
+    env_file: ./.env
+    environment:
+      - PORT=$SINISTERS_PORT
+      - DEV=$DEV
+      - MONGO_USER=$MONGO_USER
+      - MONGO_PASS=$MONGO_PASS
+      - MONGO_HOST=$MONGO_HOST
+      - MONGO_NAME=$SINISTERS_MONGO_NAME
+      - STORAGE_BASE_URL=$STORAGE_BASE_URL
+    build: ./sinisters-microservice
+    command: yarn start
+    ports:
+      - $SINISTERS_PORT:$SINISTERS_PORT
+    restart: always
+
+  clients:
+    container_name: client-microservice
+    image: client-microservices:1.0.0
+    env_file: ./.env
+    environment:
+      - PORT=$CLIENTS_PORT
+      - DEV=$DEV
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_PASS=$MYSQL_ROOT_PASSWORD
+      - MYSQL_HOST=$MYSQL_HOST
+      - MYSQL_DB=$MYSQL_DATABASE
+      - MYSQL_PORT=$MYSQL_PORT
+      - AUTH_ACTIVE=$AUTH_ACTIVE
+    build: ./clients-microservice
+    command: yarn start
+    ports:
+      - $CLIENTS_PORT:$CLIENTS_PORT
+    restart: always
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+
+  receipts:
+    container_name: receipts-microservice
+    image: receipts-microservice:1.0.0
+    env_file: ./.env
+    environment:
+      - PORT=$RECEIPTS_PORT
+      - DEV=$DEV
+      - MONGO_USER=$MONGO_USER
+      - MONGO_PASS=$MONGO_PASS
+      - MONGO_HOST=$MONGO_HOST
+      - MONGO_NAME=$RECEIPTS_MONGO_NAME
+
+    build: ./receipts-microservice
+    command: yarn start
+    ports:
+      - $RECEIPTS_PORT:$RECEIPTS_PORT
+
+    restart: always
+
+  policies:
+    env_file: ./.env
+    environment:
+      - PORT=$POLICIES_PORT
+      - DEV=$DEV
+      - MONGO_USER=$MONGO_USER
+      - MONGO_PASS=$MONGO_PASS
+      - MONGO_HOST=$MONGO_HOST
+      - MONGO_NAME=$POLICIES_MONGO_NAME
+    container_name: policies-microservice
+    image: policies-microservices:1.0.0
+    build: ./policies-microservice
+    command: yarn start
+    ports:
+      - $POLICIES_PORT:$POLICIES_PORT
+
+    restart: always
+
+
+
+
+
+
