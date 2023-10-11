@@ -1,8 +1,14 @@
-# Policies Microservices Backend
+<p align="center">
+  <img alt="Node.js" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/nodejs/nodejs.png" width="60" />
+</p>
+
+<h1 align="center">
+  Policies Microservices Backend
+</h1>
 
 ### Technologies / Tools
 
-- Node.Js
+- Node.js
 
 ### System requirements
 
